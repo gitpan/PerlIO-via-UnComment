@@ -3,7 +3,7 @@ package PerlIO::via::UnComment;
 # Set the version info
 # Make sure we do things by the book from now on
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 use strict;
 
 # Satisfy -require-
@@ -114,6 +114,10 @@ A script that only lets uncommented source code.
  use PerlIO::via::UnPod;
  binmode( STDIN,':via(UnComment):via(UnPod)' ); # could also be STDOUT
  print while <STDIN>;
+
+=head1 REQUIRED MODULES
+
+ (none)
 
 =head1 SEE ALSO
 
