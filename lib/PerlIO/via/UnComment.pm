@@ -3,7 +3,7 @@ package PerlIO::via::UnComment;
 # Set the version info
 # Make sure we do things by the book from now on
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 use strict;
 
 # Satisfy -require-
@@ -25,7 +25,7 @@ sub PUSHED {
 # Die now if strange mode
 # Create the object
 
-#    die "Can only read or write with line numbers" unless $_[1] =~ m#^[rw]$#;
+#    die "Can only read or write with removing comments" unless $_[1] =~ m#^[rw]$#;
     bless \*PUSHED,$_[0];
 } #PUSHED
 
@@ -121,9 +121,8 @@ L<PerlIO::via>, L<PerlIO::via::UnPod> and any other PerlIO::via modules on CPAN.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2002 Elizabeth Mattijsen.
-
-This library is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
+Copyright (c) 2002-2003 Elizabeth Mattijsen.  All rights reserved.  This
+library is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =cut

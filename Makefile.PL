@@ -11,9 +11,8 @@ EOD
 
 WriteMakefile (
  NAME		=> "PerlIO::via::UnComment",
- ($[ >= 5.005) ?
- (AUTHOR	=> 'Elizabeth Mattijsen (liz@dijkmat.nl)',
-  ABSTRACT	=> 'PerlIO Layer for removing comments') : (),
+ AUTHOR		=> 'Elizabeth Mattijsen (liz@dijkmat.nl)',
+ ABSTRACT	=> 'PerlIO Layer for removing comments',
  VERSION_FROM	=> 'lib/PerlIO/via/UnComment.pm',
  PREREQ_PM	=> {
                    },
