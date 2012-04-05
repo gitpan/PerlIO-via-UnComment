@@ -1,19 +1,17 @@
 package PerlIO::via::UnComment;
 
-# Set the version info
-# Make sure we do things by the book from now on
+$VERSION= '0.04';
 
-$VERSION = '0.03';
+# be as strict as possible
 use strict;
 
-# Satisfy -require-
-
+# satisfy -require-
 1;
 
 #-----------------------------------------------------------------------
-
-# Subroutines for standard Perl features
-
+#
+# Standard Perl features
+#
 #-----------------------------------------------------------------------
 #  IN: 1 class to bless with
 #      2 mode string (ignored)
@@ -22,11 +20,8 @@ use strict;
 
 sub PUSHED { 
 
-# Die now if strange mode
-# Create the object
-
-#    die "Can only read or write with removing comments" unless $_[1] =~ m#^[rw]$#;
-    bless \*PUSHED,$_[0];
+    # return an object
+    return bless \*PUSHED, $_[0];
 } #PUSHED
 
 #-----------------------------------------------------------------------
@@ -36,36 +31,30 @@ sub PUSHED {
 
 sub FILL {
 
-# Create local copy of $_
-# While there are lines to be read from the handle
-#  Return the line if it doesn't start with a '#'
-# Return indicating end reached
-
+    # return first line that isn't a comment
     local( $_ );
-    while (defined( $_ = readline( $_[1] ) )) {
-        return $_ unless /^#/;
-    }
-    undef;
+    m/^#/ or return $_ while defined( $_= readline( $_[1] ) );
+
+    return undef;
 } #FILL
 
 #-----------------------------------------------------------------------
 #  IN: 1 instantiated object
 #      2 buffer to be written
 #      3 handle to write to
-# OUT: 1 number of bytes written
+# OUT: 1 number of bytes written or -1 if failure
 
 sub WRITE {
 
-# For all of the lines in this bunch (includes delimiter at end)
-#  Reloop if it is a comment line
-#  Print the line, return now if failed
-# Return total number of octets handled
+    # print all lines that don't start with #
+  LINE:
+    foreach ( split( m#(?<=$/)#, $_[1] ) ) {
+	next LINE if m/^#/;
 
-    foreach (split( m#(?<=$/)#,$_[1] )) {
-	next if /^#/;
-        return -1 unless print {$_[2]} $_;
+        return -1 if !print {$_[2]} $_;
     }
-    length( $_[1] );
+
+    return length( $_[1] );
 } #WRITE
 
 #-----------------------------------------------------------------------
@@ -85,6 +74,10 @@ PerlIO::via::UnComment - PerlIO layer for removing comments
  
  open( my $out,'>:via(UnComment)','file.pm' )
   or die "Can't open file.pm for writing: $!\n";
+
+=head1 VERSION
+
+This documentation describes version 0.04.
 
 =head1 DESCRIPTION
 
@@ -125,8 +118,8 @@ L<PerlIO::via>, L<PerlIO::via::UnPod> and any other PerlIO::via modules on CPAN.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2002-2003 Elizabeth Mattijsen.  All rights reserved.  This
-library is free software; you can redistribute it and/or modify it under
+Copyright (c) 2002, 2003, 2004, 2012 Elizabeth Mattijsen.  All rights reserved.
+This library is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =cut

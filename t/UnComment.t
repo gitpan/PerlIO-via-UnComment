@@ -69,3 +69,4 @@ ok( close( $in ),			'close reading handle source' );
 # Remove whatever we created now
 
 ok( unlink( $file ),			"remove test file '$file'" );
+1 while unlink $file; # multiversioned filesystems
